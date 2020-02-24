@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SGZAQcGREz9ugRxt9eWnn7nHynec9lRb"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+    <title>热力图功能展示</title>
+    <style type="text/css">
+        ul,li{list-style: none;margin:0;padding:0;float:left;}
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px;font-family:"微软雅黑";}
+        #container{height:750px;width:100%;}
+        #r-result{width:100%;}
+    </style>    
+</head>
+<body>
+    <div id="container"></div>
+    <div id="r-result">
+        <input type="button"  onclick="openHeatmap();" value="Show heatmap"/><input type="button"  onclick="closeHeatmap();" value="close Heatmap"/><input type="button"  onclick="nextHeatmap();" value="Next Time Slice Heatmap"/>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var map = new BMap.Map("container");
+
+    // var point = new BMap.Point(-122.45, 37.755);
+    var point = new BMap.Point(-122.420586,37.78767);
+    map.centerAndZoom(point, 16);
+    map.enableScrollWheelZoom();
+  
+    
+    // function readTextFile(file, callback) {
+    //     var rawFile = new XMLHttpRequest();
+    //     rawFile.overrideMimeType("application/json");
+    //     rawFile.open("GET", file, true);
+    //     rawFile.onreadystatechange = function() {
+    //         if (rawFile.readyState === 4 && rawFile.status == "200") {
+    //             callback(rawFile.responseText);
+    //         }
+    //     }
+    //     rawFile.send(null);
+    // }
+
+    // var results
+    // readTextFile("F:/workSpaces/js/heapmap/dataset/locations.js", function(text){
+    //     results = JSON.parse(text);
+    // });
+
+    var points2=[
+    [{
+        'count': 29,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 19,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 19,
+        'lat': 37.789375000000021,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.792812500000018,
+        'lng': -122.4062500000001
+    }, {
+        'count': 18,
+        'lat': 37.789375000000021,
+        'lng': -122.4106250000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.41937500000009
+    }, {
+        'count': 9,
+        'lat': 37.785937500000024,
+        'lng': -122.41937500000009
+    }, {
+        'count': 19,
+        'lat': 37.785937500000024,
+        'lng': -122.41500000000009
+    }, {
+        'count': 29,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }, {
+        'count': 9,
+        'lat': 37.785937500000024,
+        'lng': -122.4062500000001
+    }, {
+        'count': 9,
+        'lat': 37.751562500000055,
+        'lng': -122.39312500000011
+    }],
+    [{
+        'count': 10,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 10,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.41937500000009
+    }, {
+        'count': 9,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }],
+    [{
+        'count': 9,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 9,
+        'lat': 37.792812500000018,
+        'lng': -122.4062500000001
+    }, {
+        'count': 10,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.4106250000001
+    }, {
+        'count': 10,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }],
+    [{
+        'count': 20,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }],
+    [{
+        'count': 29,
+        'lat': 37.792812500000018,
+        'lng': -122.4062500000001
+    }, {
+        'count': 20,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 38,
+        'lat': 37.789375000000021,
+        'lng': -122.4062500000001
+    }, {
+        'count': 29,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 18,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }],
+    [{
+        'count': 40,
+        'lat': 37.792812500000018,
+        'lng': -122.4062500000001
+    }, {
+        'count': 29,
+        'lat': 37.789375000000021,
+        'lng': -122.4062500000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.4018750000001
+    }, {
+        'count': 29,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.4106250000001
+    }, {
+        'count': 9,
+        'lat': 37.785937500000024,
+        'lng': -122.41500000000009
+    }, {
+        'count': 10,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }],
+    [{
+        'count': 10,
+        'lat': 37.789375000000021,
+        'lng': -122.41937500000009
+    }],
+    [{
+        'count': 29,
+        'lat': 37.785937500000024,
+        'lng': -122.4062500000001
+    }, {
+        'count': 19,
+        'lat': 37.792812500000018,
+        'lng': -122.4062500000001
+    }, {
+        'count': 19,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 18,
+        'lat': 37.785937500000024,
+        'lng': -122.41500000000009
+    }, {
+        'count': 28,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.4018750000001
+    }, {
+        'count': 10,
+        'lat': 37.789375000000021,
+        'lng': -122.4062500000001
+    }]
+]
+    
+
+    var trans_gtos2 = [
+    [{
+        'location': [-122.4018750000001, 37.792812500000018]
+    }, {
+        'location': [-122.4018750000001, 37.789375000000021]
+    }, {
+        'location': [-122.4106250000001, 37.785937500000024]
+    }, {
+        'location': [-122.39750000000011, 37.792812500000018]
+    }, {
+        'location': [-122.41500000000009, 37.785937500000024]
+    }, {
+        'location': [-122.4106250000001, 37.789375000000021]
+    }],
+    [{
+        'location': [-122.4018750000001, 37.792812500000018]
+    }],
+    [{
+        'location': [-122.4018750000001, 37.792812500000018]
+    }],
+    [{
+        'location': [-122.4018750000001, 37.792812500000018]
+    }],
+    [{
+        'location': [-122.4062500000001, 37.789375000000021]
+    }, {
+        'location': [-122.4106250000001, 37.785937500000024]
+    }, {
+        'location': [-122.4062500000001, 37.792812500000018]
+    }, {
+        'location': [-122.39750000000011, 37.792812500000018]
+    }],
+    [{
+        'location': [-122.4106250000001, 37.785937500000024]
+    }, {
+        'location': [-122.4106250000001, 37.789375000000021]
+    }, {
+        'location': [-122.4018750000001, 37.789375000000021]
+    }, {
+        'location': [-122.4062500000001, 37.792812500000018]
+    }],
+    [],
+    [{
+        'location': [-122.4062500000001, 37.789375000000021]
+    }, {
+        'location': [-122.4106250000001, 37.785937500000024]
+    }, {
+        'location': [-122.4062500000001, 37.792812500000018]
+    }, {
+        'location': [-122.4018750000001, 37.792812500000018]
+    }, {
+        'location': [-122.4062500000001, 37.785937500000024]
+    }]
+]
+
+
+    var points =[
+    [{
+        'count': 29,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 19,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 19,
+        'lat': 37.789375000000021,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.792812500000018,
+        'lng': -122.4062500000001
+    }, {
+        'count': 18,
+        'lat': 37.789375000000021,
+        'lng': -122.4106250000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.41937500000009
+    }, {
+        'count': 9,
+        'lat': 37.785937500000024,
+        'lng': -122.41937500000009
+    }, {
+        'count': 19,
+        'lat': 37.785937500000024,
+        'lng': -122.41500000000009
+    }, {
+        'count': 29,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }, {
+        'count': 9,
+        'lat': 37.785937500000024,
+        'lng': -122.4062500000001
+    }, {
+        'count': 9,
+        'lat': 37.751562500000055,
+        'lng': -122.39312500000011
+    }],
+    [{
+        'count': 10,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 10,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.41937500000009
+    }, {
+        'count': 9,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }],
+    [{
+        'count': 9,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 9,
+        'lat': 37.792812500000018,
+        'lng': -122.4062500000001
+    }, {
+        'count': 10,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 9,
+        'lat': 37.789375000000021,
+        'lng': -122.4106250000001
+    }, {
+        'count': 10,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }],
+    [{
+        'count': 20,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }],
+    [{
+        'count': 29,
+        'lat': 37.792812500000018,
+        'lng': -122.4062500000001
+    }, {
+        'count': 20,
+        'lat': 37.792812500000018,
+        'lng': -122.4018750000001
+    }, {
+        'count': 38,
+        'lat': 37.789375000000021,
+        'lng': -122.4062500000001
+    }, {
+        'count': 29,
+        'lat': 37.792812500000018,
+        'lng': -122.39750000000011
+    }, {
+        'count': 18,
+        'lat': 37.785937500000024,
+        'lng': -122.4106250000001
+    }]
+];
+   
+    var trans_gtos = [
+    [{
+        'location': [-122.4018750000001, 37.792812500000018]
+    }, {
+        'location': [-122.4018750000001, 37.789375000000021]
+    }, {
+        'location': [-122.4106250000001, 37.785937500000024]
+    }, {
+        'location': [-122.39750000000011, 37.792812500000018]
+    }, {
+        'location': [-122.41500000000009, 37.785937500000024]
+    }, {
+        'location': [-122.4106250000001, 37.789375000000021]
+    }],
+    [{
+        'location': [-122.4018750000001, 37.792812500000018]
+    }],
+    [{
+        'location': [-122.4018750000001, 37.792812500000018]
+    }],
+    [{
+        'location': [-122.4018750000001, 37.792812500000018]
+    }],
+    [{
+        'location': [-122.4062500000001, 37.789375000000021]
+    }, {
+        'location': [-122.4106250000001, 37.785937500000024]
+    }, {
+        'location': [-122.4062500000001, 37.792812500000018]
+    }, {
+        'location': [-122.39750000000011, 37.792812500000018]
+    }]
+];
+
+    if(!isSupportCanvas()){
+        alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
+    }
+    //详细的参数,可以查看heatmap.js的文档 https://github.com/pa7/heatmap.js/blob/master/README.md
+    //参数说明如下:
+    /* visible 热力图是否显示,默认为true
+     * opacity 热力的透明度,1-100
+     * radius 势力图的每个点的半径大小   
+     * gradient  {JSON} 热力图的渐变区间 . gradient如下所示
+     *  {
+            .2:'rgb(0, 255, 255)',
+            .5:'rgb(0, 110, 255)',
+            .8:'rgb(100, 0, 255)'
+        }
+        其中 key 表示插值的位置, 0~1. 
+            value 为颜色值. 
+     */
+    var heapmapIndex = 0
+    heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":90}); // 15->50, 16->90
+    map.addOverlay(heatmapOverlay);
+    heatmapOverlay.setDataSet({data:points[heapmapIndex],max:10});
+    
+    // 放大到 15 级
+    // var icon = new BMap.Icon(
+    //   './image/position-2.png',
+    //   new BMap.Size(32, 32)
+    // );
+
+    // 放大到 16 级
+    var icon = new BMap.Icon(
+      './image/position-2-2.png',
+      new BMap.Size(48, 48)
+    );
+
+    var marker_memo = new Array();
+    function showMarker(index) {
+        while (marker_memo.length > 0) {
+            marker = marker_memo.pop(); 
+            map.removeOverlay(marker)
+        }
+        for (var i = 0; i < trans_gtos[index%trans_gtos.length].length; i++) {
+            mk = trans_gtos[index%trans_gtos.length][i];
+            // markerPosOffset = 0.0012 // 放大到 15 级
+            markerPosOffset = 0.0010 // 放大到 16 级
+            var mostDensityPoint = new BMap.Point(mk['location'][0],mk['location'][1]+markerPosOffset);
+            var marker = new BMap.Marker(mostDensityPoint, {icon: icon});
+            map.addOverlay(marker);
+            marker_memo.push(marker)
+        }
+    }
+    function nextHeatmap(){
+        heapmapIndex += 1
+        heatmapOverlay.setDataSet({data:points[heapmapIndex%points.length],max:10});
+        openHeatmap();
+        showMarker(heapmapIndex)
+    }
+    function openHeatmap(){
+        heatmapOverlay.show();
+        showMarker(heapmapIndex)
+    }
+    function closeHeatmap(){
+        heatmapOverlay.hide();
+    }
+    closeHeatmap();
+    function setGradient(){
+        /*:
+        {
+            0:'rgb(102, 255, 0)',
+            .5:'rgb(255, 170, 0)',
+            1:'rgb(255, 0, 0)'
+        }*/
+        var gradient = {};
+        var colors = document.querySelectorAll("input[type='color']");
+        colors = [].slice.call(colors,0);
+        colors.forEach(function(ele){
+            gradient[ele.getAttribute("data-key")] = ele.value; 
+        });
+        heatmapOverlay.setOptions({"gradient":gradient});
+    }
+    function isSupportCanvas(){
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    }
+</script>

@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>百度地图，点击显示窗口自定义信息</title>
+</head>
+<body>
+<div id="allmap" style="width:830px;height:550px;overflow:hidden;">
+</div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=SGZAQcGREz9ugRxt9eWnn7nHynec9lRb"></script>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+    // 百度地图API功能
+    var x='116.419217';
+    var y='39.916261';
+    baidu(x,y);
+    /*自动定位到当前城市*/
+    function baidu(x,y){
+        if(!x || !y){
+            function myFun(result){
+                var cityName = result.name;
+                map.setCenter(cityName);
+                console.log(result)
+            }
+            var myCity = new BMap.LocalCity();
+            myCity.get(myFun);
+        }
+        map = new BMap.Map("allmap");
+        map.centerAndZoom(new BMap.Point(x,y), 14);
+        /*添加地图控制器*/
+        var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+        map.addControl(top_left_navigation);
+        //启动鼠标滚动
+        map.enableScrollWheelZoom();
+        /*$.ajax({
+            //可以从后台拉取数据，并把select绑定change事件
+        });*/
+        var data_info = [[116.417854,39.921988,"地址：北京市东城区王府井大街88号乐天银泰百货八层","王府井","http://zixuephp.net/static/images/logo.png"],
+            [116.406605,39.921585,"地址：北京市东城区东华门大街","华门大街","http://zixuephp.net/static/images/logo.png"],
+            [116.372648,39.928658,"地址：北京西城区","西大街","http://zixuephp.net/static/images/logo.png"]
+        ];
+        for(var i=0;i<data_info.length;i++){
+            var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/fox.gif", new BMap.Size(150,100));
+            var marker = new BMap.Marker(new BMap.Point(data_info[i][0],data_info[i][1]),{icon:myIcon});  // 创建标注
+            var sContent =
+                    "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>"+data_info[i][3]+"</h4>" +
+                    "<img style='float:right;margin:4px' id='imgDemo' src='"+data_info[i][4]+"' width='139' height='104' title='"+data_info[i][3]+"'/>" +
+                    "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>"+data_info[i][2]+"</p>" +
+                    "</div>";
+            map.addOverlay(marker);               // 将标注添加到地图中
+            addClickHandler(sContent,marker);
+        }
+        function addClickHandler(sContent,marker){
+            marker.addEventListener("click",function(e){
+                openInfo(sContent,e)}
+            );
+        }
+        function openInfo(sContent,e){
+            var p = e.target;
+            var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+            var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow,point); //开启信息窗口
+        }
+    }
+</script>

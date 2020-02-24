@@ -21,8 +21,9 @@
       var map;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 2,
-          center: {lat: -33.865427, lng: 151.196123},
+          zoom: 12,
+          // center: {lat: -33.865427, lng: 151.196123},
+          center: {lat: 41.156487, lng: -8.629479},
           mapTypeId: 'terrain'
         });
 
@@ -31,13 +32,18 @@
 
         // This example uses a local copy of the GeoJSON stored at
         // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-        script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+        // script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+        // script.src = 'https://raw.githubusercontent.com/qqzeng/heapmap/master/dataset/locations.js';
+        script.src = 'F:/workSpaces/js/heapmap/dataset/locations2.js'
         document.getElementsByTagName('head')[0].appendChild(script);
-
       }
 
       function eqfeed_callback(results) {
         var heatmapData = [];
+        console.log(results.features.length);
+        cor = results.features[0].geometry.coordinates
+        console.log(cor[0]);
+        console.log(cor[1]);
         for (var i = 0; i < results.features.length; i++) {
           var coords = results.features[i].geometry.coordinates;
           var latLng = new google.maps.LatLng(coords[1], coords[0]);
@@ -51,7 +57,7 @@
       }
     </script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmt84Sjg5cptuzRvKFfWkmYPu8ZVjMC-M&libraries=visualization&callback=initMap">
     </script>
   </body>
 </html>
