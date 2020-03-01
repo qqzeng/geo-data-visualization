@@ -143,11 +143,16 @@
 
     zoom_icon_dict = {18:["image/position-2-1.png", 64], 17:["image/position-2-1.png", 64], 16:["image/position-2-2.png", 48],
         15:["image/position-2.png", 32], 14:["image/position-2-3.png", 16], 13:["image/position-2-3.png", 16]};
-    // 放大到 15 级
+    // 放大到 14 级
     var icon = new BMap.Icon(
-        'image/position-2.png',
-        new BMap.Size(32, 32)
+        'image/position-2-3.png',
+        new BMap.Size(16, 16)
     );
+    // 放大到 15 级
+    // var icon = new BMap.Icon(
+    //     'image/position-2.png',
+    //     new BMap.Size(32, 32)
+    // );
     // 放大到 16 级
     // var icon = new BMap.Icon(
     //     'image/position-2-2.png',
